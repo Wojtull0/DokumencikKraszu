@@ -841,41 +841,31 @@
             for (const input of allInputs) {
                 const rawKey = input.name;
                 if (!rawKey) continue;
-                if (rawKey === &#39;fileInput&#39;) continue;
+                        if (rawKey === 'fileInput') continue;
 
-                let value = input.value || &#34;&#34;;
+        let value = input.value || "";
 
-                // birthday -&gt; DD.MM.RRRR (card.js expects string with dots)
-                if (rawKey === &#39;birthday&#39;) {
-                    value = formatDateForURL(input.value); // converts YYYY-MM-DD -&gt; DD.MM.YYYY
-                }
+        if (rawKey === 'birthday') {
+          value = formatDateForURL(input.value);
+        }
 
-                // sex -&gt; card.js expects &#39;m&#39; or &#39;k&#39; (lowercase)
-                if (rawKey === &#39;sex&#39;) {
-                    const v = (value || &#34;&#34;).toString().toLowerCase();
-                    if (v.indexOf(&#39;kob&#39;) !== -1 || v.indexOf(&#39;k&#39;) === 0) {
-                        value = &#39;k&#39;;
-                    } else {
-                        value = &#39;m&#39;;
-                    }
-                }
+        if (rawKey === 'sex') {
+          const v = (value || "").toString().toLowerCase();
+          value = (v.indexOf('kob') !== -1 || v.indexOf('k') === 0) ? 'k' : 'm';
+        }
 
-                // image hidden input: use uploaded Cloudinary url
-                if (rawKey === &#39;image&#39; &amp;&amp; imageURLInput.value) {
-                    value = imageURLInput.value;
-                }
+        if (rawKey === 'image' && imageURLInput.value) {
+          value = imageURLInput.value;
+        }
 
-                // map keys like family_name -&gt; familyName etc.
-                const finalKey = nameMap[rawKey] || rawKey;
+        const finalKey = nameMap[rawKey] || rawKey;
+        params.push(`${finalKey}=${encodeURIComponent(value)}`);
+      }
 
-                // encode and push
-                params.push(`${finalKey}=${encodeURIComponent(value)}`);
-            }
-
-            // redirect do card.html (tak jak chcesz)
-            const targetUrl = `id.html?${params.join(&#39;&amp;&#39;)}`;
-            window.location.href = targetUrl;
-        });
-    </script>
-  </body>
+      const targetUrl = `id.html?${params.join('&')}`;
+      window.location.href = targetUrl;
+    });
+  </script>
+</body>
 </html>
+
